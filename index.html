@@ -16,7 +16,7 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(60vmax
 #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:16px 16px 70px}
 :focus-visible{outline:2px solid var(--cy);outline-offset:2px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .logo{font-weight:600;font-size:19px;text-shadow:0 0 16px #ff4f8b99}
 .btn{background:var(--s2);border:1px solid var(--line);color:var(--tx);border-radius:12px;padding:7px 13px;font:inherit;font-size:14px;cursor:pointer;transition:.2s}
 .btn:hover{border-color:var(--pk);box-shadow:0 0 18px #ff4f8b55}
@@ -104,6 +104,7 @@ dialog h2{margin-bottom:10px}
 dialog label{display:block;margin:8px 0 2px;color:var(--mut);font-size:13px}
 dialog .acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 textarea.in{height:130px;font:12px/1.4 monospace;resize:vertical}
+.mb{display:flex;align-items:center;gap:10px;margin-bottom:10px}.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:600;color:#14081a;flex:none}.mb .bn{flex:1;min-width:0}.mb .bar{height:6px;margin-top:4px}.mb .bar i{background:linear-gradient(90deg,var(--cy),var(--pk))}#sync{text-align:center;color:var(--mut);font-size:13px;margin:-4px 0 12px}#sync .chip{margin-left:6px}#scope{max-width:340px;margin:0 auto 12px}
 @media(max-width:520px){.hero{grid-template-columns:1fr;text-align:center;justify-items:center}.mas{width:88px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -113,9 +114,11 @@ textarea.in{height:130px;font:12px/1.4 monospace;resize:vertical}
 <main class="wrap">
   <div class="top">
     <div class="logo">🌙 เก็บเงินวันละนิด</div>
-    <div><button class="btn" id="goalBtn">🎯 เป้าหมาย</button><button class="btn" id="bkBtn">💾 สำรอง</button></div>
+    <div><button class="btn" id="frBtn">👥 เพื่อน</button><button class="btn" id="goalBtn">🎯 เป้าหมาย</button><button class="btn" id="bkBtn">💾 สำรอง</button></div>
   </div>
 
+  <div class="seg" id="scope"><button type="button" class="on" data-s="all">👥 ทั้งแก๊ง</button><button type="button" data-s="me">🙋 ของฉัน</button></div>
+  <div id="sync"></div>
   <section class="card hero" style="--i:0">
     <svg class="mas" id="mas" viewBox="0 0 100 100" aria-label="น้องเหรียญ"><defs><radialGradient id="cg" cx="35%" cy="30%"><stop offset="0" stop-color="#fff3b0"/><stop offset="1" stop-color="#ffb21e"/></radialGradient></defs><ellipse cx="50" cy="95" rx="24" ry="4" fill="#0007"/><circle cx="50" cy="50" r="40" fill="url(#cg)" stroke="#ffe27a" stroke-width="3"/><circle cx="50" cy="50" r="31" fill="none" stroke="#e09100" stroke-opacity=".35" stroke-width="2"/><g class="eye"><ellipse cx="37" cy="48" rx="5" ry="7" fill="#2a1a00"/><circle cx="35.5" cy="45" r="2" fill="#fff"/></g><g class="eye"><ellipse cx="63" cy="48" rx="5" ry="7" fill="#2a1a00"/><circle cx="61.5" cy="45" r="2" fill="#fff"/></g><ellipse cx="28" cy="60" rx="6" ry="3.5" fill="#ff4f8b" opacity=".55"/><ellipse cx="72" cy="60" rx="6" ry="3.5" fill="#ff4f8b" opacity=".55"/><path d="M43 62q7 8 14 0" fill="none" stroke="#2a1a00" stroke-width="3" stroke-linecap="round"/><path class="spk" d="M84 10l2.5 7 7 2.5-7 2.5-2.5 7-2.5-7-7-2.5 7-2.5z" fill="#fff"/></svg>
     <div>
@@ -136,7 +139,7 @@ textarea.in{height:130px;font:12px/1.4 monospace;resize:vertical}
       <section class="card" style="--i:1">
         <h2>ลงยอดวันนี้</h2>
         <form id="f" autocomplete="off">
-          <div class="seg"><button type="button" class="on" data-t="in">⬆ ฝากเข้า</button><button type="button" data-t="out">⬇ ถอนออก</button></div>
+          <div class="seg" id="type"><button type="button" class="on" data-t="in">⬆ ฝากเข้า</button><button type="button" data-t="out">⬇ ถอนออก</button></div>
           <input class="in amt" id="amt" inputmode="decimal" placeholder="0" aria-label="จำนวนเงิน">
           <div class="chips" id="quick"></div>
           <div class="row2">
@@ -155,6 +158,7 @@ textarea.in{height:130px;font:12px/1.4 monospace;resize:vertical}
           <div><div id="gAmt" style="font-weight:600"></div><div class="lab" id="gEta"></div></div>
         </div>
       </section>
+      <section class="card" style="--i:3"><h2>🏅 อันดับในแก๊ง</h2><div id="board"></div></section>
       <section class="card" style="--i:3"><h2>เหรียญรางวัล</h2><div class="bg" id="badges"></div></section>
     </div>
     <div class="col">
@@ -177,6 +181,21 @@ textarea.in{height:130px;font:12px/1.4 monospace;resize:vertical}
   <div class="acts"><button class="btn" value="x">ยกเลิก</button><button class="btn" id="gSave" value="ok">บันทึกเป้าหมาย</button></div>
 </form></dialog>
 
+<dialog id="dFr"><form method="dialog">
+  <h2>👥 เล่นกับเพื่อน</h2>
+  <div id="frDb" class="lab" hidden>ตอนนี้ซิงก์สดผ่านบัญชีอยู่ เพื่อนที่ล็อกอินและได้รับสิทธิ์ Contributor หรือ Editor จะเห็นยอดและลงยอดร่วมกันเอง ถ้าเพื่อนดูได้อย่างเดียว ให้เจ้าของกด Share แล้วเชิญเพื่อนทางอีเมล</div>
+  <div id="frLoc">
+    <label for="fn">ชื่อของคุณ</label><input class="in" id="fn" maxlength="20" placeholder="เช่น มิ้นท์">
+    <p class="lab" style="margin-top:10px">1) คัดลอกโค้ดของคุณส่งเข้ากลุ่มแชท 2) วางโค้ดที่เพื่อนส่งมาด้านล่าง ยอดของเพื่อนจะรวมเข้าอันดับทันที วางโค้ดใหม่ของเพื่อนเมื่อไหร่ยอดก็อัปเดตเมื่อนั้น</p>
+    <label for="myc">โค้ดของคุณ</label><textarea class="in" id="myc" readonly style="height:64px"></textarea>
+    <div class="acts"><button type="button" class="btn" id="cpy">📋 คัดลอกโค้ดของฉัน</button></div>
+    <label for="frc">วางโค้ดของเพื่อน</label><textarea class="in" id="frc" style="height:64px"></textarea>
+    <div class="acts"><button type="button" class="btn" id="frAdd">➕ รวมยอดเพื่อน</button></div>
+    <div id="frList"></div>
+  </div>
+  <div class="acts"><button class="btn" value="x">ปิด</button></div>
+</form></dialog>
+
 <dialog id="dBk"><form method="dialog">
   <h2>💾 สำรองและกู้คืนข้อมูล</h2>
   <p class="lab">ข้อมูลเก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น คัดลอกข้อความด้านล่างไว้เป็นไฟล์สำรอง หรือวางข้อมูลเก่าแล้วกดนำเข้า</p>
@@ -190,9 +209,15 @@ var K='kep-money-v1',RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
 var CATS={food:['🍜','อาหาร'],job:['💼','เงินเดือน'],gift:['🎁','ของขวัญ'],other:['🪙','อื่นๆ']};
 var TITLES=['มือใหม่หัดเก็บ','เด็กฝึกสายออม','นักเก็บเหรียญ','อัศวินกระปุก','จอมคลังสมบัติ','ราชันย์แห่งการออม','เทพเจ้าแห่งทองคำ'];
 var $=function(s){return document.querySelector(s)};
-var S=load(),type='in',filt='all',lastId=null,tt;
-function load(){try{var r=JSON.parse(localStorage.getItem(K));if(r&&Array.isArray(r.entries))return r}catch(e){}return{entries:[],goal:{name:'เป้าหมายแรกของเรา',target:10000},badges:[]}}
-function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+var S=load(),type='in',filt='all',lastId=null,tt,scope='all',DB=null,USR=null,ME=S.id,UP={},OLD=[],fresh=false,stale=false;
+function ALL(){if(DB)return S.entries;var a=S.entries.slice();for(var k in S.friends)a=a.concat(S.friends[k].entries);return a}
+function scopeE(){return scope==='me'?ALL().filter(function(e){return e.uid===ME}):ALL()}
+function nm(u){var p=UP[u];if(p&&p.name)return p.name;if(!DB){if(u===ME)return S.name||'ฉัน';var f=S.friends[u];return(f&&f.name)||'เพื่อน'}return u===ME?'ฉัน':'เพื่อน'}
+function names(){var ids=[];ALL().forEach(function(e){if(e.uid&&ids.indexOf(e.uid)<0)ids.push(e.uid)});if(!USR||!USR.profiles||!ids.length)return Promise.resolve();return USR.profiles(ids).then(function(p){UP=p||{}}).catch(function(){})}
+function sync(){var el=$('#sync');if(!DB){var n=Object.keys(S.friends).length;el.textContent='💾 ข้อมูลอยู่ในเครื่องนี้ · '+(n?'รวมยอดกับเพื่อน '+n+' คน':'กดปุ่ม 👥 เพื่อน เพื่อรวมยอดกับเพื่อนด้วยโค้ด');return}var m={};ALL().forEach(function(e){m[e.uid]=1});var ro=USR&&USR.can&&USR.can('data.write')===false;el.innerHTML=(stale?'⚠ ยังเชื่อมต่อข้อมูลแก๊งไม่ได้ ข้อมูลอาจเก่า':'🟢 ซิงก์สดกับเพื่อน · '+Object.keys(m).length+' คน')+(ro?' · 👀 ดูได้อย่างเดียว ขอให้เจ้าของเชิญเป็นผู้แก้ไข':'')+(OLD.length?'<button class="chip" id="imp">⬆ นำเข้ายอดเก่า '+OLD.length+' รายการ</button>':'')}
+function addE(e){var ts=Date.now();e.ts=ts;e.uid=ME;if(DB){var id='e'+ts+Math.random().toString(36).slice(2,6);lastId=id;fresh=true;DB.collection('entries').doc(id).set(e).catch(function(){fresh=false;toast('บันทึกไม่สำเร็จ บัญชีนี้อาจยังไม่มีสิทธิ์เขียน ขอให้เจ้าของเชิญเป็นผู้แก้ไข')});return}e.id=ts;lastId=ts;S.entries.push(e);save()}
+function load(){var r=null;try{r=JSON.parse(localStorage.getItem(K))}catch(e){}if(!r||!Array.isArray(r.entries))r={entries:[],goal:{name:'เป้าหมายแรกของเรา',target:10000},badges:[]};r.id=r.id||'u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);r.name=r.name||'';r.friends=r.friends||{};r.badges=r.badges||[];r.entries.forEach(function(e){if(!e.uid)e.uid=r.id});return r}
+function save(){if(DB){try{localStorage.setItem(K+'-b',JSON.stringify(S.badges))}catch(e){}return}try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function today(){return ymd(new Date())}
 function fmt(n){return'฿'+Number(n).toLocaleString('th-TH',{maximumFractionDigits:2})}
@@ -224,7 +249,7 @@ function check(quiet,c){var nw=B.filter(function(b){return b[3](c)&&S.badges.ind
 
 /* render */
 function render(quiet){
-var E=S.entries,tot=sum(E),t=today(),mo=t.slice(0,7);
+sync();var E=scopeE(),tot=sum(E),t=today(),mo=t.slice(0,7);
 var td=sum(E.filter(function(e){return e.date===t})),mt=sum(E.filter(function(e){return e.date.slice(0,7)===mo}));
 var ds={};E.forEach(function(e){if(e.amt>0)ds[e.date]=1});
 var d=new Date();if(!ds[ymd(d)])d.setDate(d.getDate()-1);var st=0;while(ds[ymd(d)]){st++;d.setDate(d.getDate()-1)}
@@ -249,11 +274,13 @@ setTimeout(function(){document.querySelectorAll('.cb i').forEach(function(b){b.s
 /* badges */
 var ctx={n:E.length,tot:tot,st:st};check(quiet,ctx);
 $('#badges').innerHTML=B.map(function(b){return'<div class="b'+(S.badges.indexOf(b[0])>=0?' on':'')+'"><em>'+b[2]+'</em>'+b[1]+'</div>'}).join('');
+var bt={};ALL().forEach(function(e){var u=e.uid||ME;bt[u]=(bt[u]||0)+e.amt});var bu=Object.keys(bt).sort(function(a,b){return bt[b]-bt[a]}),bm=Math.max(1,bt[bu[0]]||1);
+$('#board').innerHTML=bu.length?bu.map(function(u,i){var p=UP[u]||{},n=nm(u),c=/^#[0-9a-f]{3,8}$/i.test(p.color||'')?p.color:['#ff4f8b','#3de8ff','#ffc94d','#5dffb0','#b48bff','#ff9a5c'][i%6];return'<div class="mb"><div class="av" style="background:'+c+'">'+esc(Array.from(n)[0]||'?')+'</div><div class="bn"><div style="display:flex;justify-content:space-between"><span>'+(i===0&&bu.length>1?'👑 ':'')+esc(n)+(u===ME?' (คุณ)':'')+'</span><b class="'+(bt[u]>=0?'pos':'neg')+'">'+fmt(bt[u])+'</b></div><div class="bar"><i style="width:'+Math.max(0,Math.round(bt[u]/bm*100))+'%"></i></div></div></div>'}).join(''):'<div class="empty">ยังไม่มีใครลงยอด</div>';
 /* history */
-var L=E.filter(function(e){return filt==='all'||(filt==='in'?e.amt>0:e.amt<0)}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:b.id-a.id}).slice(0,60);
+var L=E.filter(function(e){return filt==='all'||(filt==='in'?e.amt>0:e.amt<0)}).sort(function(a,b){return a.date<b.date?1:a.date>b.date?-1:(b.ts||b.id||0)-(a.ts||a.id||0)}).slice(0,60);
 if(!L.length){$('#hist').innerHTML='<div class="empty">ยังไม่มีรายการ<br>ลงยอดแรกในช่องฝั่งซ้ายได้เลย</div>';return}
 var out='',cur='';L.forEach(function(e,i){if(e.date!==cur){cur=e.date;var dsum=sum(E.filter(function(z){return z.date===cur}));out+='<div class="day"><span>'+fdate(cur)+'</span><span class="'+(dsum>=0?'pos':'neg')+'">รวม '+fmt(dsum)+'</span></div>'}
-var c=CATS[e.cat]||CATS.other;out+='<div class="it'+(e.id===lastId?' new':'')+'"><span class="ic">'+c[0]+'</span><div class="n"><div>'+esc(e.note||c[1])+'</div><small>'+c[1]+'</small></div><b class="'+(e.amt>0?'pos':'neg')+'">'+(e.amt>0?'+':'')+fmt(e.amt)+'</b><button class="x" data-del="'+e.id+'" aria-label="ลบรายการ">✕</button></div>'});
+var c=CATS[e.cat]||CATS.other;out+='<div class="it'+(e.id===lastId?' new':'')+'"><span class="ic">'+c[0]+'</span><div class="n"><div>'+esc(e.note||c[1])+'</div><small>'+c[1]+' · '+esc(nm(e.uid))+'</small></div><b class="'+(e.amt>0?'pos':'neg')+'">'+(e.amt>0?'+':'')+fmt(e.amt)+'</b><button class="x" data-del="'+e.id+'" aria-label="ลบรายการ"'+(e.uid===ME?'':' hidden')+'>✕</button></div>'});
 $('#hist').innerHTML=out;lastId=null}
 
 /* form */
@@ -261,24 +288,41 @@ $('#cat').innerHTML=Object.keys(CATS).map(function(k){return'<option value="'+k+
 $('#quick').innerHTML=[20,50,100,500,1000].map(function(v){return'<button type="button" class="chip" data-q="'+v+'">+'+v+'</button>'}).join('');
 $('#date').value=today();$('#date').max=today();
 $('#quick').onclick=function(e){var q=e.target.dataset.q;if(!q)return;var a=$('#amt');a.value=(parseFloat(a.value)||0)+Number(q);a.focus()};
-document.querySelectorAll('.seg button').forEach(function(b){b.onclick=function(){type=b.dataset.t;document.querySelectorAll('.seg button').forEach(function(x){x.classList.toggle('on',x===b)});$('#go').textContent=type==='in'?'ฝากเลย':'ถอนออก';$('#go').classList.toggle('out',type==='out')}});
+document.querySelectorAll('#type button').forEach(function(b){b.onclick=function(){type=b.dataset.t;document.querySelectorAll('#type button').forEach(function(x){x.classList.toggle('on',x===b)});$('#go').textContent=type==='in'?'ฝากเลย':'ถอนออก';$('#go').classList.toggle('out',type==='out')}});
 $('#f').onsubmit=function(ev){ev.preventDefault();var a=parseFloat(String($('#amt').value).replace(/,/g,''));
 if(!(a>0)||a>1e9){var i=$('#amt');i.classList.remove('shake');void i.offsetWidth;i.classList.add('shake');toast('ใส่จำนวนเงินที่มากกว่า 0');return}
-var id=Date.now();lastId=id;S.entries.push({id:id,date:$('#date').value||today(),amt:type==='in'?a:-a,note:$('#note').value.trim(),cat:$('#cat').value});save();
+addE({date:$('#date').value||today(),amt:type==='in'?a:-a,note:$('#note').value.trim(),cat:$('#cat').value});
 $('#amt').value='';$('#note').value='';var r=$('#go').getBoundingClientRect();hop();
-if(type==='in'){burst(r.left+r.width/2,r.top);toast('ฝากเข้า '+fmt(a)+' เรียบร้อย ✨')}else toast('ถอนออก '+fmt(a)+' แล้ว');render()};
+if(type==='in'){burst(r.left+r.width/2,r.top);toast('ฝากเข้า '+fmt(a)+' เรียบร้อย ✨')}else toast('ถอนออก '+fmt(a)+' แล้ว');if(!DB)render()};
 $('#tabs').onclick=function(e){var f=e.target.dataset.f;if(!f)return;filt=f;document.querySelectorAll('#tabs .chip').forEach(function(c){c.classList.toggle('on',c===e.target)});render(true)};
-$('#hist').onclick=function(e){var id=e.target.dataset.del;if(!id)return;var i=S.entries.findIndex(function(x){return String(x.id)===id});if(i<0)return;var r=S.entries.splice(i,1)[0];save();render(true);toast('ลบรายการแล้ว','เลิกทำ',function(){S.entries.push(r);save();render(true)})};
+$('#hist').onclick=function(e){var id=e.target.dataset.del;if(!id)return;var i=S.entries.findIndex(function(x){return String(x.id)===id});if(i<0)return;var r=S.entries[i];if(DB){if(r.uid!==ME)return;DB.collection('entries').doc(id).delete().catch(function(){toast('ลบไม่สำเร็จ')});toast('ลบรายการแล้ว','เลิกทำ',function(){var c=Object.assign({},r);delete c.id;DB.collection('entries').doc(id).set(c)});return}S.entries.splice(i,1);save();render(true);toast('ลบรายการแล้ว','เลิกทำ',function(){S.entries.push(r);save();render(true)})};
 $('#mas').onclick=function(){hop();var m=['ได้ยินนะ~ เก็บเงินต่อไปเลย!','ทุกบาทมีค่า ✨','เก่งมากที่ยังสู้อยู่!','วันละนิดก็ถึงเป้าได้นะ'];$('#bub').textContent=m[Math.floor(Math.random()*m.length)]};
 
 /* dialogs */
 $('#goalBtn').onclick=function(){$('#gn').value=S.goal.name;$('#gt').value=S.goal.target;$('#dGoal').showModal()};
-$('#gf').addEventListener('submit',function(e){if(e.submitter&&e.submitter.value==='ok'){var t=parseFloat(String($('#gt').value).replace(/,/g,''));if(t>0){S.goal={name:$('#gn').value.trim()||'เป้าหมายของเรา',target:t};save();render(true);toast('ตั้งเป้าหมายใหม่แล้ว 🎯')}}});
-$('#bkBtn').onclick=function(){$('#bk').value=JSON.stringify(S);$('#bkClr').textContent='ล้างข้อมูลทั้งหมด';$('#dBk').showModal()};
+$('#gf').addEventListener('submit',function(e){if(e.submitter&&e.submitter.value==='ok'){var t=parseFloat(String($('#gt').value).replace(/,/g,''));if(t>0){S.goal={name:$('#gn').value.trim()||'เป้าหมายของเรา',target:t};save();if(DB)DB.doc('meta/goal').set(S.goal).catch(function(){toast('บัญชีนี้ยังไม่มีสิทธิ์แก้เป้าหมาย')});render(true);toast('ตั้งเป้าหมายใหม่แล้ว 🎯')}}});
+$('#bkBtn').onclick=function(){$('#bkImp').hidden=$('#bkClr').hidden=!!DB;$('#bk').value=JSON.stringify(DB?{entries:S.entries,goal:S.goal}:S);$('#bkClr').textContent='ล้างข้อมูลทั้งหมด';$('#dBk').showModal()};
 $('#bkImp').onclick=function(){try{var o=JSON.parse($('#bk').value);if(!o||!Array.isArray(o.entries)||!o.entries.every(function(e){return typeof e.date==='string'&&/^\d{4}-\d\d-\d\d$/.test(e.date)&&isFinite(e.amt)}))throw 0;
-S={entries:o.entries.map(function(e,i){return{id:e.id||Date.now()+i,date:e.date,amt:+e.amt,note:String(e.note||'').slice(0,40),cat:CATS[e.cat]?e.cat:'other'}}),goal:{name:String(o.goal&&o.goal.name||'เป้าหมายของเรา').slice(0,30),target:+(o.goal&&o.goal.target)||10000},badges:Array.isArray(o.badges)?o.badges.map(String):[]};save();render(true);$('#dBk').close();toast('นำเข้าข้อมูลสำเร็จ')}catch(e){toast('รูปแบบข้อมูลไม่ถูกต้อง ลองคัดลอกใหม่ทั้งหมด')}};
-$('#bkClr').onclick=function(){var b=$('#bkClr');if(b.textContent!=='กดอีกครั้งเพื่อยืนยันการลบ'){b.textContent='กดอีกครั้งเพื่อยืนยันการลบ';return}S={entries:[],goal:{name:'เป้าหมายแรกของเรา',target:10000},badges:[]};save();$('#xp').style.width='0';render(true);$('#dBk').close();toast('ล้างข้อมูลแล้ว')};
+S={id:S.id,name:S.name,friends:S.friends,entries:o.entries.map(function(e,i){return{id:e.id||Date.now()+i,date:e.date,amt:+e.amt,note:String(e.note||'').slice(0,40),cat:CATS[e.cat]?e.cat:'other',uid:S.id}}),goal:{name:String(o.goal&&o.goal.name||'เป้าหมายของเรา').slice(0,30),target:+(o.goal&&o.goal.target)||10000},badges:Array.isArray(o.badges)?o.badges.map(String):[]};save();render(true);$('#dBk').close();toast('นำเข้าข้อมูลสำเร็จ')}catch(e){toast('รูปแบบข้อมูลไม่ถูกต้อง ลองคัดลอกใหม่ทั้งหมด')}};
+$('#bkClr').onclick=function(){var b=$('#bkClr');if(b.textContent!=='กดอีกครั้งเพื่อยืนยันการลบ'){b.textContent='กดอีกครั้งเพื่อยืนยันการลบ';return}S={id:S.id,name:S.name,friends:{},entries:[],goal:{name:'เป้าหมายแรกของเรา',target:10000},badges:[]};save();$('#xp').style.width='0';render(true);$('#dBk').close();toast('ล้างข้อมูลแล้ว')};
 
+document.querySelectorAll('#scope button').forEach(function(b){b.onclick=function(){scope=b.dataset.s;document.querySelectorAll('#scope button').forEach(function(x){x.classList.toggle('on',x===b)});render(true)}});
+$('#sync').onclick=function(e){if(e.target.id!=='imp')return;var o=OLD;OLD=[];o.forEach(function(x,i){var ts=+x.id||Date.now();DB.collection('entries').doc('e'+ts+'i'+i).set({date:x.date,amt:x.amt,note:x.note||'',cat:x.cat||'other',uid:ME,ts:ts}).catch(function(){})});try{localStorage.removeItem(K)}catch(z){}toast('นำเข้ายอดเก่าแล้ว')};
+function startShared(db,us){DB=db;USR=us;if(S.entries.length)OLD=S.entries;S.entries=[];S.goal={name:'เป้าหมายของแก๊ง',target:10000};try{S.badges=JSON.parse(localStorage.getItem(K+'-b'))||[]}catch(e){S.badges=[]}
+var lt=setTimeout(function(){stale=true;sync()},10000);
+db.collection('entries').onSnapshot(function(sn){if(!sn.metadata.fromCache){clearTimeout(lt);stale=false}S.entries=sn.docs.map(function(d){var x=d.data()||{};return{id:d.id,date:String(x.date||''),amt:+x.amt,note:String(x.note||'').slice(0,40),cat:CATS[x.cat]?x.cat:'other',uid:String(x.uid||'?'),ts:+x.ts||0}}).filter(function(e){return/^\d{4}-\d\d-\d\d$/.test(e.date)&&isFinite(e.amt)});names().then(function(){render(!fresh);fresh=false})},function(){stale=true;sync()});
+db.doc('meta/goal').onSnapshot(function(s){if(s.exists){var g=s.data()||{};if(+g.target>0)S.goal={name:String(g.name||'เป้าหมายของแก๊ง').slice(0,30),target:+g.target};render(true)}},function(){})}
+function boot(n){if(window.claude&&claude.use){Promise.all([claude.use('db'),claude.use('user')]).then(function(r){if(!r[0])return;var us=r[1];return Promise.resolve(us&&us.id?us.id():null).then(function(id){ME=id||S.id;startShared(r[0],us)})}).catch(function(){})}else if(n<40)setTimeout(function(){boot(n+1)},250)}
+function code(){var m=S.entries.filter(function(e){return e.uid===S.id}).map(function(e){return[e.date,e.amt,e.note||'',e.cat||'other']});return'KEP1.'+btoa(unescape(encodeURIComponent(JSON.stringify({u:S.id,n:S.name,e:m}))))}
+function frList(){var k=Object.keys(S.friends);$('#frList').innerHTML=k.length?'<label>เพื่อนที่รวมแล้ว</label>'+k.map(function(u){var f=S.friends[u];return'<div class="mb"><div class="bn">'+esc(f.name||'เพื่อน')+' <span class="lab">'+f.entries.length+' รายการ · อัปเดต '+new Date(f.at).toLocaleDateString('th-TH',{day:'numeric',month:'short'})+'</span></div><button type="button" class="x" data-rm="'+esc(u)+'" aria-label="เอาเพื่อนออก">✕</button></div>'}).join(''):''}
+$('#frBtn').onclick=function(){$('#frDb').hidden=!DB;$('#frLoc').hidden=!!DB;if(!DB){$('#fn').value=S.name;$('#myc').value=code();frList()}$('#dFr').showModal()};
+$('#fn').oninput=function(){S.name=this.value.slice(0,20);save();$('#myc').value=code();render(true)};
+$('#cpy').onclick=function(){var t=$('#myc');t.focus();t.select();try{document.execCommand('copy');toast('คัดลอกโค้ดแล้ว ส่งเข้ากลุ่มได้เลย')}catch(e){toast('กดค้างที่โค้ดเพื่อคัดลอก')}};
+$('#frList').onclick=function(e){var u=e.target.dataset.rm;if(!u)return;delete S.friends[u];save();render(true);frList()};
+$('#frAdd').onclick=function(){try{var t=$('#frc').value.trim();if(t.indexOf('KEP1.')!==0)throw 0;var o=JSON.parse(decodeURIComponent(escape(atob(t.slice(5)))));if(!o||typeof o.u!=='string'||!Array.isArray(o.e))throw 0;if(o.u===S.id){toast('นี่คือโค้ดของคุณเอง ให้เพื่อนส่งโค้ดของเขามา');return}
+var en=o.e.filter(function(r){return Array.isArray(r)&&/^\d{4}-\d\d-\d\d$/.test(r[0])&&isFinite(r[1])}).slice(0,3000).map(function(r,i){return{id:'f'+i,date:r[0],amt:+r[1],note:String(r[2]||'').slice(0,40),cat:CATS[r[3]]?r[3]:'other',uid:o.u,ts:new Date(r[0]).getTime()+i}});
+S.friends[o.u]={name:String(o.n||'').slice(0,20),entries:en,at:Date.now()};save();$('#frc').value='';render(true);frList();toast('รวมยอดของ '+(S.friends[o.u].name||'เพื่อน')+' แล้ว ('+en.length+' รายการ)')}catch(e){toast('โค้ดไม่ถูกต้อง ลองคัดลอกใหม่ทั้งหมดตั้งแต่ KEP1')}};
+boot(0);
 render(true);
 })();
 </script>
